@@ -1,0 +1,32 @@
+version: '2'
+services:
+  db:
+    image: mariadb
+    ports:
+      - "3306:3306"    
+    restart: always    
+    volumes:
+      - db:/var/lib/mysql    
+    environment:
+      - MYSQL_USER=friendica      
+      - MYSQL_PASSWORD=friendica
+      - MYSQL_DATABASE=friendica      
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes 
+  app:
+    image: friendica    
+    restart: always    
+    volumes:
+      - friendica:/var/www/html    
+    ports:
+      - "8080:80"
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=friendica
+      - MYSQL_PASSWORD=friendica
+      - MYSQL_DATABASE=friendica
+      - FRIENDICA_ADMIN_MAIL=root@friendica.local      
+    depends_on:
+      - db
+volumes: 
+    db:
+    friendica:
